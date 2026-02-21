@@ -42,12 +42,6 @@
       "target": "api::category.category",
       "inversedBy": "articles"
     },
-    "author": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::author.author",
-      "inversedBy": "articles"
-    },
     "is_trending": {
       "type": "boolean",
       "default": false
@@ -55,6 +49,13 @@
     "reading_time": {
       "type": "integer",
       "default": 3
+    },
+    "Author": {
+      "type": "string",
+      "required": true
+    },
+    "date": {
+      "type": "date"
     }
   }
 }
