@@ -1,4 +1,4 @@
-import { ARTICLES } from "@/lib/data";
+import { getArticles } from "@/lib/api";
 import ArticleCard from "@/components/ui/ArticleCard";
 import SectionHeader from "@/components/ui/SectionHeader";
 
@@ -10,7 +10,9 @@ export default async function SearchPage({
     const { q } = await searchParams;
     const query = q?.toLowerCase() || "";
 
-    const results = ARTICLES.filter((article) => {
+    const articles = await getArticles();
+
+    const results = articles.filter((article) => {
         const titleMatch = article.title.toLowerCase().includes(query);
         const categoryMatch = article.category.toLowerCase().includes(query);
         const excerptMatch = article.excerpt.toLowerCase().includes(query);
@@ -35,7 +37,7 @@ export default async function SearchPage({
                     <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mb-4 text-2xl">🔍</div>
                     <h3 className="text-xl font-bold text-gray-800">No matching articles found</h3>
                     <p className="mt-2 text-gray-500 max-w-sm">
-                        We couldn't find anything matching "{query}". Try checking your spelling or use more general keywords.
+                        We couldn&apos;t find anything matching &quot;{query}&quot;. Try checking your spelling or use more general keywords.
                     </p>
                 </div>
             )}

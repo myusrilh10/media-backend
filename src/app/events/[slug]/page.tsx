@@ -1,4 +1,3 @@
-import { EVENTS } from "@/lib/data";
 import Image from "next/image";
 import { Calendar, MapPin, Share2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -6,10 +5,11 @@ import SectionHeader from "@/components/ui/SectionHeader";
 import EventCard from "@/components/ui/EventCard";
 import AdBanner from "@/components/ui/AdBanner";
 import { notFound } from "next/navigation";
+import { getEventBySlug, getEvents } from "@/lib/api";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
-    const event = EVENTS.find(e => e.slug === slug);
+    const event = await getEventBySlug(slug);
     if (!event) return { title: "Event Not Found" };
 
     return {
@@ -20,13 +20,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function EventDetailPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
-    const event = EVENTS.find(e => e.slug === slug);
+    const event = await getEventBySlug(slug);
 
     if (!event) {
         notFound();
     }
 
-    const otherEvents = EVENTS.filter(e => e.id !== event.id).slice(0, 3);
+    const allEvents = await getEvents();
+    const otherEvents = allEvents.filter(e => e.id !== event.id).slice(0, 3);
 
     return (
         <div className="min-h-screen bg-white pb-20">

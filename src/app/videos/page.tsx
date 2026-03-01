@@ -1,13 +1,15 @@
 import VideoCard from "@/components/ui/VideoCard";
 import AdBanner from "@/components/ui/AdBanner";
-import { VIDEOS } from "@/lib/data";
+import { getVideos } from "@/lib/api";
 
 export const metadata = {
     title: "Videos | Arti Fiksi Media",
     description: "Watch the latest stories through our cinematic documentaries and interviews.",
 };
 
-export default function VideosPage() {
+export default async function VideosPage() {
+    const videos = await getVideos();
+
     return (
         <div className="min-h-screen bg-white">
             <div className="container mx-auto px-4 py-16 md:px-6">
@@ -21,13 +23,19 @@ export default function VideosPage() {
                     </p>
                 </div>
 
-                <div className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
-                    {VIDEOS.map((video) => (
-                        <div key={video.id} className="h-full">
-                            <VideoCard video={video} />
-                        </div>
-                    ))}
-                </div>
+                {videos.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-24 text-gray-400">
+                        <p className="text-lg font-semibold">Belum ada video yang dipublikasikan.</p>
+                    </div>
+                ) : (
+                    <div className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+                        {videos.map((video) => (
+                            <div key={video.id} className="h-full">
+                                <VideoCard video={video} />
+                            </div>
+                        ))}
+                    </div>
+                )}
 
                 <div className="mt-24">
                     <AdBanner size="leaderboard" className="hidden md:flex" />

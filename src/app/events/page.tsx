@@ -1,13 +1,15 @@
 import EventCard from "@/components/ui/EventCard";
 import AdBanner from "@/components/ui/AdBanner";
-import { EVENTS } from "@/lib/data";
+import { getEvents } from "@/lib/api";
 
 export const metadata = {
     title: "Events | Arti Fiksi Media",
     description: "Follow the latest and coolest events from the world of art, culture, and business.",
 };
 
-export default function EventsPage() {
+export default async function EventsPage() {
+    const events = await getEvents();
+
     return (
         <div className="min-h-screen bg-white">
             <div className="container mx-auto px-4 py-16 md:px-6">
@@ -21,13 +23,19 @@ export default function EventsPage() {
                     </p>
                 </div>
 
-                <div className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
-                    {EVENTS.map((event) => (
-                        <div key={event.id} className="h-full">
-                            <EventCard event={event} />
-                        </div>
-                    ))}
-                </div>
+                {events.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-24 text-gray-400">
+                        <p className="text-lg font-semibold">Belum ada acara yang dipublikasikan.</p>
+                    </div>
+                ) : (
+                    <div className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+                        {events.map((event) => (
+                            <div key={event.id} className="h-full">
+                                <EventCard event={event} />
+                            </div>
+                        ))}
+                    </div>
+                )}
 
                 <div className="mt-24">
                     <AdBanner size="leaderboard" className="hidden md:flex" />
